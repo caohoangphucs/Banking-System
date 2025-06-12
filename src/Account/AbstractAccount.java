@@ -9,20 +9,39 @@ public class AbstractAccount implements AccountType {
     private String type;
     private float balance = 0;
     private Logger logger;
+    private int dayTransferLimit = 0;
+    private int dayTotalTransfer;
     AccountService service = AccountService.getInstance();
     public AbstractAccount(String type, String accountID, String ownerName ){
         this.accountID = accountID;
         this.ownerName = ownerName;
         this.type = type;
+        setDefaultDayTransferLimit();
         logger = new Logger(type + "Account ");
         logger.Log(Logger.status.SUCCESSFUL, "Account ID: "+this.accountID + " is created");
         service.add(this);
     }
+    private int getDefaultTransferLimit() {
+        return switch (getType()) {
+            case "Standard" -> 1000;
+            case "Saving" -> 100;
+            default -> 0;
+        };
+    }
 
+    public void setDayTransferLimit(int dayTransferLimit) {
+        this.dayTransferLimit = dayTransferLimit;
+    }
+
+    private void setDefaultDayTransferLimit() {
+        setDayTransferLimit(getDefaultTransferLimit());
+    }
     public void setAccountID(String accountID) {
         this.accountID = accountID;
     }
-
+    public void addTotalDayTransfer(float amount) {
+        this.dayTotalTransfer += amount;
+    }
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
@@ -43,6 +62,7 @@ public class AbstractAccount implements AccountType {
         this.service = service;
     }
 
+    public int getDayTransferLimit() {return this.dayTransferLimit;}
     public String getType() {
         return this.type;
     }
@@ -53,12 +73,16 @@ public class AbstractAccount implements AccountType {
     }
     public void withdraw(float amount) {
         this.balance -= amount;
+        addTotalDayTransfer(amount);
     }
     public void deposit(float amount) {
         this.balance += amount;
     }
     public boolean hasEnoughMoney(float amount) {
-        return (balance - amount >= 0);
+        return (this.balance - amount >= 0);
+    }
+    public boolean isTouchDayLimit(float amount) {
+        return (this.dayTotalTransfer + amount > this.dayTransferLimit);
     }
 }
 

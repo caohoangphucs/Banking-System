@@ -28,8 +28,8 @@ public class TransactionService {
 
 
         // Checking stuff go here
-        if (!A.hasEnoughMoney(amount)) {
-            logger.Log(Logger.status.ERROR, "Account " + A.getOwnerName() + "is not enough money");
+        if (!accountService.canTransfer(accountIDA, amount)) {
+            logger.Log(Logger.status.ERROR, "Transaction fail!");
             return;
         }
 

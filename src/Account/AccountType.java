@@ -8,4 +8,5 @@ public interface AccountType {
     void withdraw(float amount);
     void deposit(float amount);
     boolean hasEnoughMoney(float amount);
+    boolean isTouchDayLimit(float amount);
 }

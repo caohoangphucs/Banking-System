@@ -47,8 +47,8 @@ public class Client {
 
         AccountType targetAccount = accountService.findByID(accountID);
         //Checking stuff
-        if (!targetAccount.hasEnoughMoney(amount)) {
-            logger.Log(Logger.status.ERROR, "Account not enough money");
+        if (!accountService.canTransfer(accountID, amount)) {
+            logger.Log(Logger.status.ERROR, "Withdraw failed!");
             return;
         }
         targetAccount.withdraw(amount);
