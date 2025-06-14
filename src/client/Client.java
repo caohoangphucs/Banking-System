@@ -4,6 +4,7 @@ import Account.AccountType;
 import Utils.*;
 import service.AccountService;
 import service.TransactionService;
+import service.UserService;
 
 //private package
 import java.sql.Array;
@@ -13,22 +14,27 @@ import java.util.ArrayList;
 
 
 public class Client {
+    private String ID;
     private String name;
     private String address;
     private int age;
     private LocalDate registerTime;
-    private String ID;
     private Logger logger;
     private List<AccountType> accounts;
     private AccountService accountService = AccountService.getInstance();
     public Client(String name, int age, String address) {
-
+        this.ID = UserService.getInstance().generateUniqueID();
         this.name = name;
         this.address = address;
         this.age = age;
         this.accounts = new ArrayList<>();
         logger = new Logger("Client " + name);
-        logger.Log(Logger.status.SUCCESSFUL, "Created user " + name);
+    }
+    public String getID() {
+        return this.ID;
+    }
+    public void setID(String ID) {
+        this.ID = ID;
     }
     public void creatAccount(String type, String accountID) {
         this.accounts.add(AccountFactory.createAccount(type, this.name, accountID));

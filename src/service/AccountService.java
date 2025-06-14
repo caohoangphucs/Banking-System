@@ -6,19 +6,21 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 public class AccountService {
-    private static final AccountService instance = new AccountService();
-    Logger logger = new Logger("Account service");
-    private AccountService() {
-    }
-
+    private final Map<String, AccountType> accountList = new HashMap<>();
+    private final Logger logger = new Logger("Account Service");
+    private static AccountService instance;
+    public AccountService() {};
     public static AccountService getInstance() {
+        if (instance == null) {
+            instance = new AccountService();
+        }
         return instance;
     }
     public void creatAccount(String type, String ownerName, String accountID) {
         AccountType newAccount = AccountFactory.createAccount(type, ownerName, accountID );
 
     }
-    final Map<String, AccountType> accountList = new HashMap<>();
+
     public void add(AccountType account) {
         accountList.put(account.getAccountID(), account);
     }

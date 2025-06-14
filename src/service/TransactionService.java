@@ -4,11 +4,8 @@ import client.*;
 import Account.*;
 public class TransactionService {
     private static TransactionService instance;
-    private static Logger logger = new Logger("TransactionService");
-    private TransactionService() {
-        logger.Log(Logger.status.SUCCESSFUL, "transaction service is inited");
-
-    }
+    private final Logger logger = new Logger("Transaction service");
+    public TransactionService(){};
     public static TransactionService getInstance() {
         if (instance == null) {
             instance =  new TransactionService();

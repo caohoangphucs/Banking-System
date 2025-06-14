@@ -7,6 +7,7 @@ import java.util.Collection;
 public class Logger {
     private String name;
     public enum status {
+        LOADING,
         WARNING,
         ERROR,
         SUCCESSFUL,
