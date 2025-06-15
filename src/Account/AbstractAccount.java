@@ -61,7 +61,9 @@ public class AbstractAccount implements AccountType {
     public void setService(AccountService service) {
         this.service = service;
     }
-
+    public void setOwner(String ownerName) {
+        this.ownerName = ownerName;
+    }
     public int getDayTransferLimit() {return this.dayTransferLimit;}
     public String getType() {
         return this.type;
@@ -84,6 +86,7 @@ public class AbstractAccount implements AccountType {
     public boolean isTouchDayLimit(float amount) {
         return (this.dayTotalTransfer + amount > this.dayTransferLimit);
     }
+
 }
 
 

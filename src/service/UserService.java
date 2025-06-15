@@ -22,7 +22,13 @@ public class UserService {
 
     //User list
     private final Map<String, Client> Clients = new HashMap<>();
-
+    public boolean canCreateAccount(String userID) {
+        //TODO: Creat a basic condition for creating account
+        return true;
+    }
+    public void transfer(String accountIDA, String accountIDB, float amount) {
+        AccountService.getInstance().transfer(accountIDA, accountIDB, amount);
+    }
     public Client findUserByID(String IDTarget) {
         for (String ID: Clients.keySet()) {
             if (ID.equals(IDTarget)) return Clients.get(ID);
@@ -39,7 +45,7 @@ public class UserService {
     //Add user
     public void addUser(Client client) {
         Clients.put(client.getID(), client);
-        logger.Log(Logger.status.SUCCESSFUL, "Created user" + client.getName());
+        logger.Log(Logger.status.SUCCESSFUL, "Created user " + client.getName()+ " With ID: " +client.getID());
     }
 
 }

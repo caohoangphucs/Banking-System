@@ -36,14 +36,11 @@ public class Client {
     public void setID(String ID) {
         this.ID = ID;
     }
-    public void creatAccount(String type, String accountID) {
-        this.accounts.add(AccountFactory.createAccount(type, this.name, accountID));
-    }
     public String getName() {
         return this.name;
     }
-    public void transfer(String sourceAccountID, String accountID, float amount) {
-        TransactionService.getInstance().requestTransfer(sourceAccountID, accountID, amount);
+    public void requestTransfer(String sourceAccountID, String accountID, float amount) {
+        AccountService.getInstance().transfer(sourceAccountID, accountID, amount);
     }
     public void deposit(String accountID, float amount) {
         AccountType targetAccount = accountService.findByID(accountID);
