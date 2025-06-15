@@ -1,6 +1,8 @@
 package Utils;
 import Account.*;
 import Utils.*;
+import client.Client;
+
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -23,10 +25,18 @@ public class Logger {
         System.out.println(logMessage);
         return;
     }
-    public void displayAccounts(Collection<AccountType> accounts) {
+    public void displayAccounts(Collection<AbstractAccount> accounts) {
         System.out.println("------Account list-----");
         for (AccountType acc : accounts) {
-            String LogMessage = "Account type : " + acc.getType() + " | Account ID: " + acc.getAccountID() + "| Account balance : " + acc.getBalance();
+            String LogMessage = "Account type : " + acc.getType() + " | Account ID: " + acc.getAccountID()+ "| Account owner: " + acc.getOwnerName() + "| Account balance : " + acc.getBalance();
+            System.out.println(LogMessage);
+        }
+    }
+    public void displayUsers(Collection<Client> users) {
+        System.out.println("------User list-----");
+        for (Client user : users) {
+            String LogMessage = "User ID: " + user.getID() + "| User name: " + user.getName()
+                                + "| User info (age/address): " +user.getAge() + "|" +user.getAddress();
             System.out.println(LogMessage);
         }
     }

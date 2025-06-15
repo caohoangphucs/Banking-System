@@ -1,6 +1,6 @@
 package Account;
 public class AccountFactory {
-    public static AccountType createAccount(String type, String ownerName, String accountID) {
+    public static AbstractAccount createAccount(String type, String ownerName, String accountID) {
         switch (type) {
             case "Saving":
                 return new SavingAccount(accountID, ownerName);

@@ -1,7 +1,8 @@
 package service;
 import Utils.Logger;
-import client.*;
 import Account.*;
+import dto.TransferRequest;
+
 public class TransactionService {
     private static TransactionService instance;
     private final Logger logger = new Logger("Transaction service");
@@ -18,14 +19,14 @@ public class TransactionService {
         logger.Log(Logger.status.COMPLETE, "User " + A.getOwnerName() + " transfer " + amount + " to user " + B.getOwnerName());
 
     }
-    public void requestTransfer(String accountIDA, String accountIDB, float amount) {
+    public void requestTransfer(TransferRequest request) {
         AccountService accountService = AccountService.getInstance();
-        AccountType A = accountService.findByID(accountIDA);
-        AccountType B = accountService.findByID(accountIDB);
-
+        AbstractAccount A = accountService.findByID(request.getAccountIDA());
+        AbstractAccount B = accountService.findByID(request.getAccountIDB());
+        float amount = request.getAmount();
 
         // Checking stuff go here
-        if (!accountService.canTransfer(accountIDA, amount)) {
+        if (!accountService.canWithdraw(A, amount)) {
             logger.Log(Logger.status.ERROR, "Transaction fail!");
             return;
         }
