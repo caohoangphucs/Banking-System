@@ -1,0 +1,5 @@
+create user Phucdeptrai 18 TPHCM
+create user TungOcVat 1 Cali
+create user NganHihihaha 12 Cila
+
+create account 1111 Saving
