@@ -11,6 +11,7 @@ public class AbstractAccount implements AccountType {
     private Logger logger;
     private int dayTransferLimit = 0;
     private int dayTotalTransfer;
+    private boolean isLock = false;
     AccountService service = AccountService.getInstance();
     public AbstractAccount(String type, String accountID, String ownerName ){
         this.accountID = accountID;
@@ -23,10 +24,18 @@ public class AbstractAccount implements AccountType {
     }
     private int getDefaultTransferLimit() {
         return switch (getType()) {
-            case "Standard" -> 1000;
-            case "Saving" -> 100;
+            case "standard" -> 1000;
+            case "saving" -> 100;
+            case "credit" -> 500;
             default -> 0;
         };
+    }
+    public void lock() {
+        this.isLock = true;
+    }
+
+    public boolean isLock() {
+        return isLock;
     }
 
     public void setDayTransferLimit(int dayTransferLimit) {

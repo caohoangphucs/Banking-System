@@ -1,7 +1,7 @@
 package client;
 import Account.AccountType;
 import Utils.*;
-import dto.TransferRequest;
+import dto.request.*;
 import service.AccountService;
 
 //private package
@@ -11,10 +11,12 @@ import java.util.ArrayList;
 
 
 public class Client {
+
     private String ID;
     private String name;
     private String address;
     private int age;
+    private String email;
     private LocalDate registerTime;
     private Logger logger;
     private List<AccountType> accounts;
@@ -71,4 +73,5 @@ public class Client {
 
         accountService.handleWithdraw(accountID, amount);
     }
+
 }

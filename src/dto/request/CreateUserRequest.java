@@ -1,14 +1,23 @@
-package dto;
+package dto.request;
 public class CreateUserRequest {
     String name;
     int age;
     String address;
     String id;
-
-    public CreateUserRequest(String name, int age, String address) {
+    String email;
+    public CreateUserRequest(String name, int age, String address, String email) {
         this.name = name;
         this.age = age;
         this.address = address;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {

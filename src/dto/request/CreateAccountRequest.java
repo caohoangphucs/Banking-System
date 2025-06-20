@@ -1,12 +1,14 @@
-package dto;
+package dto.request;
 public class CreateAccountRequest {
+        String email;
         String ownerID;
         String accountID;
         String accountType;
 
-    public CreateAccountRequest(String ownerID, String accountType) {
+    public CreateAccountRequest(String ownerID, String accountType, String email) {
         this.ownerID = ownerID;
         this.accountType = accountType;
+        this.email = email;
     }
 
     public String getOwnerID() {

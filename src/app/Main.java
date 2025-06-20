@@ -1,3 +1,4 @@
+package app;
 import client.Client;
 import Utils.Logger;
 import service.AccountService;

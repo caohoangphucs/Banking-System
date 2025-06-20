@@ -2,9 +2,11 @@ package service;
 import Account.*;
 import client.*;
 import Utils.*;
-import dto.*;
-import dto.TransferRequest;
+import dto.db.*;
+import dto.request.*;
+import repository.UserRepository;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,23 +28,26 @@ public class UserService {
 
     //User list
 
-    public boolean canCreateAccount(String userID) {
+    public boolean canCreateAccount(CreateAccountRequest request) {
         //TODO: Creat a basic condition for creating account
+        Client targetUser = findUserByID(request.getOwnerID());
+        String accountType = request.getAccountType();
+        if (targetUser.getAge() < 18 && accountType.equals("credit")) {
+            logger.Log(Logger.status.ERROR, "User ID " + targetUser.getID() + " not enough age");
+            return false;
+        }
         return true;
     }
     public boolean canCreateUser(CreateUserRequest userInfo) {
         //TODO: Creat some basic condition for creating user
         return true;
     }
+
     public void transfer(TransferRequest rq) {
         AccountService.getInstance().transfer(rq);
     }
     public Client findUserByID(String IDTarget) {
-        for (String ID: this.Clients.keySet()) {
-
-            if (ID.equals(IDTarget)) return Clients.get(ID);
-        }
-        return null;
+        return Clients.get(IDTarget);
     }
     public String generateUniqueID() {
         String ID = "1111";
@@ -54,18 +59,21 @@ public class UserService {
     public Collection<Client> getAllUsers() {
         return Clients.values();
     }
-    public void createUser(CreateUserRequest userInfo) {
-        Client newUser = new Client(userInfo.getName(), userInfo.getAge(), userInfo.getAddress());
-        newUser.setID(generateUniqueID());
-        addUser(newUser);
+    public void createUser(CreateUserRequest userInfo) throws SQLException {
+        UserDto newUser = new UserDto(userInfo.getId(), userInfo.getAge(), userInfo.getName(), userInfo.getAddress(), userInfo.getEmail());
+        UserRepository.getInstance().save(newUser);
     }
-    public void handleCreateUser(CreateUserRequest request) {
+    public void handleCreateUser(CreateUserRequest request){
         if (!canCreateUser(request)) {
             logger.Log(Logger.status.ERROR, "Cant creat user");
         }
 
         //Implement here
-        createUser(request);
+        try {
+            createUser(request);
+        } catch (SQLException e) {
+                logger.Log(Logger.status.ERROR, "Saving fail: " + e.toString());
+        }
     }
     //Add user
     public void addUser(Client client) {

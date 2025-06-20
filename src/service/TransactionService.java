@@ -1,7 +1,7 @@
 package service;
 import Utils.Logger;
 import Account.*;
-import dto.TransferRequest;
+import dto.request.*;
 
 public class TransactionService {
     private static TransactionService instance;

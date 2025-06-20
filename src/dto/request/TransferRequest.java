@@ -1,4 +1,4 @@
-package dto;
+package dto.request;
 public class TransferRequest {
     String accountIDA;
     String accountIDB;

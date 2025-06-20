@@ -1,7 +1,9 @@
 package service;
 import Account.*;
 import Utils.*;
-import dto.*;
+import dto.request.*;
+import dto.db.*;
+import client.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,6 @@ public class AccountService {
         return true;
     }
     private void createAccount(CreateAccountRequest request) {
-        request.setAccountID(getUniqueID());
         if (!isValidOwner(request.getOwnerID())) {
             logger.Log(Logger.status.ERROR, "User not valid");
             return;
@@ -35,7 +36,8 @@ public class AccountService {
     }
     public void handleCreatAccountRequest(CreateAccountRequest request) {
         // Checking
-        if (!UserService.getInstance().canCreateAccount(request.getOwnerID())) {
+
+        if (!UserService.getInstance().canCreateAccount(request)) {
             logger.Log(Logger.status.ERROR, "This user can't creat account");
             return;
         }
@@ -72,8 +74,16 @@ public class AccountService {
         return true;
     }
     public boolean canDeposit(AbstractAccount account, float amount) {
-
         //TODO: is account locked, is account have day limit, ...
+        if (account.isLock()) {
+            logger.Log(Logger.status.ERROR, "Account is locked !");
+            return false;
+        }
+        if (account.isTouchDayLimit(amount)) {
+            logger.Log(Logger.status.ERROR, "Account is touch day transfer limit");
+            return false;
+        }
+
         return true;
     }
     public void handleWithdraw(String accountID, float amount) {
@@ -101,6 +111,7 @@ public class AccountService {
         }
         if (!canDeposit(acc, amount)) {
             logger.Log(Logger.status.ERROR, "Account cant deposit");
+            return;
         }
 
         //deposit

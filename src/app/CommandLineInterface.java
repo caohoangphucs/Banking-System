@@ -1,22 +1,26 @@
+package app;
 import java.util.Scanner;
 
-import Account.AccountType;
-import client.Client;
 import Utils.Logger;
-import dto.*;
+import dto.request.*;
+import dto.db.*;
+import dto.request.*;
+import repository.*;
 import test.TestLoader;
 import service.AccountService;
 import service.TransactionService;
 import service.UserService;
-
+import java.sql.*;
 public class CommandLineInterface {
     private static UserService userService;
     private static AccountService accountService;
     private static TransactionService transactionService;
+    private static Connection repo;
     private static final Logger logger = new Logger("Main class");
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         Scanner scanner = new Scanner(System.in);
         initSystem();
+        connectDatabase();
         for (String command: TestLoader.loadCommand("test/UserAndAccount.txt")) {
             handleCommand(command);
         }
@@ -36,10 +40,17 @@ public class CommandLineInterface {
     }
     private static void initService() {
         logger.Log(Logger.status.LOADING, "Preparing System...");
+
         userService = UserService.getInstance();
         accountService = AccountService.getInstance();
         transactionService = TransactionService.getInstance();
         logger.Log(Logger.status.SUCCESSFUL, "Banking System is ready to use");
+    }
+    private static void connectDatabase() throws SQLException {
+        logger.Log(Logger.status.LOADING, "Connecting to database....");
+        repo = Connector.getConnection();
+        logger.Log(Logger.status.SUCCESSFUL, repo.getClientInfo().toString());
+        logger.Log(Logger.status.SUCCESSFUL, "Connected");
     }
     private static void printInitMessage() {
         System.out.println("Welcome to basic banking system, this is command line interface");
@@ -65,24 +76,25 @@ public class CommandLineInterface {
         }
     }
     public static void handleCreatAccount(String args[]) {
-        if (!Utils.utils.hasEnoughArgs(args, 4)) {
-            printUse("creat account <userID> <accountType>");
+        if (!Utils.utils.hasEnoughArgs(args, 5)) {
+            printUse("creat account <userID> <accountType> <email>");
             return;
         }
         //implement here
-        CreateAccountRequest rq = new CreateAccountRequest(args[2], args[3]);
+        CreateAccountRequest rq = new CreateAccountRequest(args[2], args[3], args[4]);
         accountService.handleCreatAccountRequest(rq);
     }
     public static void handleCreateUser(String args[]) {
-        if (!Utils.utils.hasEnoughArgs(args, 5)) {
-            printUse("create user <name> <age> <address>");
+        if (!Utils.utils.hasEnoughArgs(args, 6)) {
+            printUse("create user <name> <age> <address> <email>");
             return;
         }
         String name = args[2];
         int age = Integer.parseInt(args[3]);
         String address = args[4];
+        String email = args[5];
         CreateUserRequest user = new CreateUserRequest(
-            name, age, address
+            name, age, address, email
         );
 
         userService.handleCreateUser(user);
